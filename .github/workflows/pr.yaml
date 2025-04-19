@@ -10,8 +10,6 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
-    services:
-
     concurrency: ci_test
     outputs:
       semver: ${{steps.semver.outputs.version_tag}}
