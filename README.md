@@ -15,6 +15,15 @@
 
 ---
 
+## 📦 Installation
+
+To install the bctool CLI via Homebrew:
+
+```
+brew tap mselser95/bctool
+brew install bctool
+```
+
 ## 💡 Example Usage
 
 ```
