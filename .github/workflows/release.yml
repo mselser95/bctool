@@ -51,8 +51,6 @@ jobs:
             dist/bctool_linux_arm64.sha256
             dist/bctool_windows_amd64.exe
             dist/bctool_windows_amd64.exe.sha256
-            dist/bctool_windows_arm64.exe
-            dist/bctool_windows_arm64.exe.sha256
         env:
           GITHUB_TOKEN: ${{ secrets.TAGGING_PAT }}
 
@@ -89,7 +87,9 @@ jobs:
         run: |
           VERSION=${{ github.ref_name }}
           FORMULA=tap/Formula/bctool.rb
-
+          
+          mkdir -p "$(dirname $FORMULA)"  # ✅ ensures tap/Formula exists
+          
           echo "class Bctool < Formula" | tee $FORMULA
           echo "  desc \"Blockchain info tool\"" >> $FORMULA
           echo "  homepage \"https://github.com/mselser95/bctool\"" >> $FORMULA
