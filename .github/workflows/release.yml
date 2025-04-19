@@ -12,10 +12,6 @@ jobs:
   release:
     runs-on: ubuntu-latest
 
-    container:
-      image: ghcr.io/antorcha/osxcross-gox:latest  # includes osxcross + gox + Go
-      options: --privileged
-
     steps:
       - uses: actions/checkout@v4
         with:
@@ -24,28 +20,20 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
-          go-version: 1.24.2
+          go-version: 1.21
 
       - name: Install gox
         run: go install github.com/mitchellh/gox@latest
 
-      - name: Cross-compile Binaries (Linux/macOS/Windows, all major archs)
+      - name: Cross-compile (linux/windows/arm)
         run: |
           mkdir -p dist/
-          gox -osarch="linux/amd64 linux/arm linux/arm64 darwin/amd64 darwin/arm64 windows/amd64 windows/arm64" \
+          gox -osarch="linux/amd64 linux/arm64 windows/amd64 windows/arm64" \
               -output "dist/bctool_{{.OS}}_{{.Arch}}" ./cmd
 
-      - name: Generate SHA256 Checksums
-        run: |
-          cd dist
-          for f in bctool_*; do
-            shasum -a 256 "$f" > "$f.sha256"
-          done
-
-      - name: Upload Release Assets
+      - name: Upload to Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ github.ref_name }}
           files: |
             dist/bctool_*
         env:
