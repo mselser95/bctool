@@ -24,6 +24,13 @@ brew tap mselser95/bctool
 brew install bctool
 ```
 
+To update the bctool CLI via Homebrew:
+
+```
+brew update
+brew upgrade bctool
+```
+
 ## 💡 Example Usage
 
 ```
