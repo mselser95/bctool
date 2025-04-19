@@ -36,14 +36,23 @@ jobs:
           for f in *; do
             shasum -a 256 "$f" > "$f.sha256"
           done
-
+      - name: List dist contents before upload
+        run: |
+          echo "📦 Binaries prepared for release:"
+          ls -lh dist/
 
       - name: Upload to Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            dist/bctool_*
-            dist/*.sha256
+            dist/bctool_linux_amd64
+            dist/bctool_linux_amd64.sha256
+            dist/bctool_linux_arm64
+            dist/bctool_linux_arm64.sha256
+            dist/bctool_windows_amd64.exe
+            dist/bctool_windows_amd64.exe.sha256
+            dist/bctool_windows_arm64.exe
+            dist/bctool_windows_arm64.exe.sha256
         env:
           GITHUB_TOKEN: ${{ secrets.TAGGING_PAT }}
 
