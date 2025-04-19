@@ -87,9 +87,8 @@ jobs:
         run: |
           VERSION=${{ github.ref_name }}
           FORMULA=tap/Formula/bctool.rb
-          
-          mkdir -p "$(dirname $FORMULA)"  # ✅ ensures tap/Formula exists
-          
+          mkdir -p "$(dirname $FORMULA)"
+
           echo "class Bctool < Formula" | tee $FORMULA
           echo "  desc \"Blockchain info tool\"" >> $FORMULA
           echo "  homepage \"https://github.com/mselser95/bctool\"" >> $FORMULA
@@ -108,7 +107,13 @@ jobs:
           echo "  end" >> $FORMULA
           echo "" >> $FORMULA
           echo "  def install" >> $FORMULA
-          echo "    bin.install \"\#{stable.url.split('/')[-1]}\" => \"bctool\"" >> $FORMULA
+          echo "    if OS.linux?" >> $FORMULA
+          echo "      if Hardware::CPU.intel?" >> $FORMULA
+          echo "        bin.install \"bctool_linux_amd64\" => \"bctool\"" >> $FORMULA
+          echo "      elsif Hardware::CPU.arm?" >> $FORMULA
+          echo "        bin.install \"bctool_linux_arm64\" => \"bctool\"" >> $FORMULA
+          echo "      end" >> $FORMULA
+          echo "    end" >> $FORMULA
           echo "  end" >> $FORMULA
           echo "" >> $FORMULA
           echo "  test do" >> $FORMULA
